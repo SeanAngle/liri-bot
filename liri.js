@@ -1,15 +1,15 @@
 require("dotenv").config();
 
-
+//All Variables
 var keys = require("./keys.js");
 var request = require('request');
-var Bands = require("./keys.js")
 var Spotify = require('node-spotify-api');
 var fs = require('fs');
-var input = process.argv;
-var action = input[2];
-var inputs = input[3];
+var moment = require('moment')
+var action = process.argv[2];
+var inputs = process.argv.slice(3).join(" ");
 
+//Switch and Case calls the functions
 switch (action) {
 	case "concert-this":
 	bandsInTown(inputs);
@@ -25,31 +25,42 @@ switch (action) {
 
 	case "do-what-it-says":
 	doWhatItSays();
-	break;
+    break;
+
+    case "help":
+    console.log("In order to use this program you must enter a command with the following format: 'node liri <command> <search term>\nhe command 'concert-this' will return the next venue of the artist/band entered in the search.\nThe command 'spotify-this-song' will return information of the song entered in the search\nThe command 'movie-this' will return information of the movie entered in the search\nThe command do-what-it-says will take the command and search term from random.txt");
+    break;
+
+    default:
+    console.log("Commands include 'concert-this', 'spotify-this-song', 'movie-this', and 'do-what-it-says'. If you have more questions, type command 'help'");
 };
 
+//Calls the band the user picks and gives them information on their next show
 function bandsInTown(inputs) {
-    var key = new Bands(keys.bandKeys);
+    var key = "21a32782080ab9f4e10fa1754fc55ff1";
     
     var URL = "https://rest.bandsintown.com/artists/" + inputs + "/events?app_id=" + key;
 
     request(URL, function(error, response, body){
-
-        var venueInfo = response.venue;
-
-        if(!inputs){
-            inputs = 'Drake';
-            console.log("------------------");
-            console.log("Event Name: " + venueInfo[0].name);
-            console.log("Event Locaton: " + venueInfo[0].city + " , " + venueInfo[0].Country);
-            console.log("Event time: ");
-
-
+        if(error){
+            console.log("Error: " + error);
         }
+
+
+        if(!error && response.statusCode === 200){
+            var item = JSON.parse(body)[0];
+            console.log("------------------");
+            console.log("Lineup: " + item.lineup);
+            console.log("Venue Name: "+ item.venue.name);
+            console.log("Location: " + item.venue.city + ", " + item.venue.region);
+            console.log("Date: " + moment(item.datetime).format("MM/DD/YYYY"))
+            console.log("------------------");
+        }   
     })
 
 }
 
+//This function uses the spotify API to get information on a song of their choice
 function spotify(inputs) {
 
     var spotify = new Spotify(keys.spotifyKeys);
@@ -97,7 +108,7 @@ function spotify(inputs) {
 	});
 }
 
-
+//The movie function get information of a movie of their choice
 function movie(inputs) {
 
 	var URL = "http://www.omdbapi.com/?t=" + inputs + "&y=&plot=short&apikey=trilogy";
@@ -123,12 +134,18 @@ function movie(inputs) {
 	});
 };
 
+//This function takes the text of the random.txt file and puts it directly into the function of spotify 
 function doWhatItSays() {
-	fs.readFile('log.txt', "utf8", function(error, data){
+	fs.readFile('random.txt', "utf8", function(error, data){
 
 		if (error) {
     		return console.log(error);
-  		}
+        }
+
+        var dataArr = data.split(",");
+        action = dataArr[0];
+        inputs = dataArr[1];
+        spotify(inputs);
 
 		
 		
