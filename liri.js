@@ -28,7 +28,7 @@ switch (action) {
     break;
 
     case "help":
-    console.log("In order to use this program you must enter a command with the following format: 'node liri <command> <search term>\nhe command 'concert-this' will return the next venue of the artist/band entered in the search.\nThe command 'spotify-this-song' will return information of the song entered in the search\nThe command 'movie-this' will return information of the movie entered in the search\nThe command do-what-it-says will take the command and search term from random.txt");
+    console.log("In order to use this program you must enter a command with the following format: 'node liri <command> <search term>\nThe command 'concert-this' will return the next venue of the artist/band entered in the search.\nThe command 'spotify-this-song' will return information of the song entered in the search\nThe command 'movie-this' will return information of the movie entered in the search\nThe command do-what-it-says will take the command and search term from random.txt");
     break;
 
     default:
