@@ -44,16 +44,21 @@ function bandsInTown(inputs) {
     request(URL, function(error, response, body){
         if(error){
             console.log("Error: " + error);
+            return;
         }
 
 
-        if(!error && response.statusCode === 200){
+        if(JSON.parse(body)[0].lineup === null){
+            console.log("Information not available at this time.");
+            return;
+
+        }else if(!error && response.statusCode === 200){
             var item = JSON.parse(body)[0];
             console.log("------------------");
             console.log("Lineup: " + item.lineup);
             console.log("Venue Name: "+ item.venue.name);
             console.log("Location: " + item.venue.city + ", " + item.venue.region);
-            console.log("Date: " + moment(item.datetime).format("MM/DD/YYYY"))
+            console.log("Date: " + moment(item.datetime).format("MM/DD/YYYY"));
             console.log("------------------");
         }   
     })
@@ -112,20 +117,22 @@ function spotify(inputs) {
 
 //The movie function get information of a movie of their choice
 function movie(inputs) {
+        
+    if (!inputs){
+        var inputs = 'Mr Nobody';
+    }
 
-	var URL = "http://www.omdbapi.com/?t=" + inputs + "&y=&plot=short&apikey=trilogy";
+    var URL = "http://www.omdbapi.com/?t=" + inputs + "&y=&plot=short&apikey=trilogy";
 
 	request(URL, function(error, response, body) {
-		if (!inputs){
-        	inputs = 'Mr Nobody';
-    	}
+		
 		if (!error && response.statusCode === 200) {
 
             console.log("------------------------");
 		    console.log("Title: " + JSON.parse(body).Title);
 		    console.log("Release Year: " + JSON.parse(body).Year);
 		    console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
-		    console.log("Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value);
+		    console.log("Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[0].Value);
 		    console.log("Country: " + JSON.parse(body).Country);
 		    console.log("Language: " + JSON.parse(body).Language);
 		    console.log("Plot: " + JSON.parse(body).Plot);
