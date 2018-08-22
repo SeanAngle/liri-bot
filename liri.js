@@ -65,6 +65,7 @@ function spotify(inputs) {
 
     var spotify = new Spotify(keys.spotifyKeys);
     
+    //This if statement inputs the title 'The Sign' if there is noting inputed in the song field
     if (!inputs){
         
         inputs = 'The Sign';
@@ -89,6 +90,7 @@ function spotify(inputs) {
         return;
     }
 
+    //This takes the song that was inserted into the song field and looks for the data for that song
     spotify.search({ type: 'track', query: inputs }, function(error, data) {
         
         if (error){
