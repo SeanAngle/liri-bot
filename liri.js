@@ -47,20 +47,28 @@ function bandsInTown(inputs) {
             return;
         }
 
+        // console.log(typeof body, body);
 
-        if(JSON.parse(body)[0].lineup === null){
-            console.log("Information not available at this time.");
-            return;
+        if(body.length<5){
+            console.log("------------------");
+            console.log("I'm sorry. No available information at this time.");
+            console.log("------------------");
+        }else{
+        
+            if(JSON.parse(body)[0].lineup === null){
+                console.log("Information not available at this time.");
+                return;
 
-        }else if(!error && response.statusCode === 200){
-            var item = JSON.parse(body)[0];
-            console.log("------------------");
-            console.log("Lineup: " + item.lineup);
-            console.log("Venue Name: "+ item.venue.name);
-            console.log("Location: " + item.venue.city + ", " + item.venue.region);
-            console.log("Date: " + moment(item.datetime).format("MM/DD/YYYY"));
-            console.log("------------------");
-        }   
+            }else if(!error && response.statusCode === 200){
+                var item = JSON.parse(body)[0];
+                console.log("------------------");
+                console.log("Lineup: " + item.lineup);
+                console.log("Venue Name: "+ item.venue.name);
+                console.log("Location: " + item.venue.city + ", " + item.venue.region);
+                console.log("Date: " + moment(item.datetime).format("MM/DD/YYYY"));
+                console.log("------------------");
+            } 
+        }    
     })
 
 }
@@ -117,7 +125,7 @@ function spotify(inputs) {
 
 //The movie function get information of a movie of their choice
 function movie(inputs) {
-        
+
     if (!inputs){
         var inputs = 'Mr Nobody';
     }
